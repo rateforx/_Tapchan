@@ -1,0 +1,23 @@
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-color: black;
+    color: white;
+}
+
+a {
+    color: #00B7FF;
+}
+
+h1 {
+    font: 3em Pac-Font;
+}
+
+#thegame {
+    width: auto;
+    height: auto;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: -1;
+}
