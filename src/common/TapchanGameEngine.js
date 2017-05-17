@@ -7,6 +7,7 @@ const Pacman        = require('./Pacman');
 const Ghost         = require('./Ghost');
 const Wall          = require('./Wall');
 const Collectibles  = require('./Collectibles');
+const Map           = require('./Map');
 
 //Game constants
 const PLAYER_SPEED      = 50;
@@ -68,6 +69,7 @@ class TapchanGameEngine extends GameEngine {
 
 
     initGame() {
+
         this.addObjectToWorld(new Pacman(++this.world.idCount, 0, 0, 0));
         // this.addObjectToWorld(new Pacman(++this.world.idCount, 100, 100, 1));
 

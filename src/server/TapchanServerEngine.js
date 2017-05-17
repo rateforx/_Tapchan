@@ -12,10 +12,7 @@ class TapchanServerEngine extends ServerEngine {
 
     start() {
         super.start();
-
         this.gameEngine.initGame();
-
-        this.players = [];
     }
 
     onPlayerConnected(socket) {

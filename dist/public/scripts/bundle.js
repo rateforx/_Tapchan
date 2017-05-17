@@ -8263,17 +8263,19 @@ for(;i<length;i++){map[alphabet[i]]=i;}//
 // Expose the `yeast`, `encode` and `decode` functions.
 //
 yeast.encode=encode;yeast.decode=decode;module.exports=yeast;},{}],232:[function(require,module,exports){/**
+ * Created by Snippy on 2017-05-17.
+ */var Camera=function Camera(x,y,w,h){var _this23=this;_classCallCheck(this,Camera);this.position={x:x,y:y,set:function set(x,y){_this23.x=x;_this23.y=y;}};this.position.set(x,y);this.scale=1;this.size={w:w,h:h,set:function set(w,h){_this23.w=w;_this23.h=h;}};this.size.set(w,h);this.update(x,y,w);};},{}],233:[function(require,module,exports){/**
  * Created by Snippy on 2017-05-03.
  */var ClientEngine=require('lance-gg').ClientEngine;var TapchanRenderer=require('./TapchanRenderer');var TapchanClientEngine=function(_ClientEngine){_inherits(TapchanClientEngine,_ClientEngine);function TapchanClientEngine(gameEngine,options){_classCallCheck(this,TapchanClientEngine);// this.serializer.registerClass(require('../common/Pacman'));
-var _this23=_possibleConstructorReturn(this,(TapchanClientEngine.__proto__||Object.getPrototypeOf(TapchanClientEngine)).call(this,gameEngine,options,TapchanRenderer));_this23.gameEngine.on('client__preStep',_this23.preStep.bind(_this23));//keep a reference for key press state
-_this23.pressedKeys={down:false,up:false,left:false,right:false,space:false};// let that = this;
-document.onkeydown=function(e){return _this23.onKeyChange(e,true);};document.onkeyup=function(e){return _this23.onKeyChange(e,true);};return _this23;}//our pre-step is to process all inputs
+var _this24=_possibleConstructorReturn(this,(TapchanClientEngine.__proto__||Object.getPrototypeOf(TapchanClientEngine)).call(this,gameEngine,options,TapchanRenderer));_this24.gameEngine.on('client__preStep',_this24.preStep.bind(_this24));//keep a reference for key press state
+_this24.pressedKeys={down:false,up:false,left:false,right:false,space:false};// let that = this;
+document.onkeydown=function(e){return _this24.onKeyChange(e,true);};document.onkeyup=function(e){return _this24.onKeyChange(e,true);};return _this24;}//our pre-step is to process all inputs
 _createClass(TapchanClientEngine,[{key:"preStep",value:function preStep(){if(this.pressedKeys.up)this.sendInput('up',{movement:true});if(this.pressedKeys.down)this.sendInput('down',{movement:true});if(this.pressedKeys.left)this.sendInput('left',{movement:true});if(this.pressedKeys.right)this.sendInput('right',{movement:true});// if (this.pressedKey.space)  this.sendInput('space', { movement: true });
 }},{key:"onKeyChange",value:function onKeyChange(e,isDown){e=e||window.event;if(e.keyCode=='38'){this.pressedKeys.up=isDown;}else if(e.keyCode=='40'){this.pressedKeys.down=isDown;}else if(e.keyCode=='37'){this.pressedKeys.left=isDown;}else if(e.keyCode=='39'){this.pressedKeys.right=isDown;// } else if (e.keyCode == '32') {
 //     this.pressedKeys.space = isDown;
-}}}]);return TapchanClientEngine;}(ClientEngine);module.exports=TapchanClientEngine;},{"./TapchanRenderer":233,"lance-gg":126}],233:[function(require,module,exports){/**
+}}}]);return TapchanClientEngine;}(ClientEngine);module.exports=TapchanClientEngine;},{"./TapchanRenderer":234,"lance-gg":126}],234:[function(require,module,exports){/**
  * Created by Snippy on 2017-04-28.
- */var Renderer=require('lance-gg').render.Renderer;var TapchanRenderer=function(_Renderer2){_inherits(TapchanRenderer,_Renderer2);function TapchanRenderer(gameEngine,clientEngine){_classCallCheck(this,TapchanRenderer);var _this24=_possibleConstructorReturn(this,(TapchanRenderer.__proto__||Object.getPrototypeOf(TapchanRenderer)).call(this,gameEngine,clientEngine));window.onresize=function(){var canvas=document.getElementById('thegame');canvas.width=window.innerWidth;canvas.height=window.innerHeight;};return _this24;}_createClass(TapchanRenderer,[{key:"draw",value:function draw(){_get(TapchanRenderer.prototype.__proto__||Object.getPrototypeOf(TapchanRenderer.prototype),"draw",this).call(this);//get canvas
+ */var Renderer=require('lance-gg').render.Renderer;var Campera=require('./Camera');var TapchanRenderer=function(_Renderer2){_inherits(TapchanRenderer,_Renderer2);function TapchanRenderer(gameEngine,clientEngine){_classCallCheck(this,TapchanRenderer);var _this25=_possibleConstructorReturn(this,(TapchanRenderer.__proto__||Object.getPrototypeOf(TapchanRenderer)).call(this,gameEngine,clientEngine));window.onresize=function(){var canvas=document.getElementById('thegame');canvas.width=window.innerWidth;canvas.height=window.innerHeight;};_this25.camera=new Camera();return _this25;}_createClass(TapchanRenderer,[{key:"draw",value:function draw(){_get(TapchanRenderer.prototype.__proto__||Object.getPrototypeOf(TapchanRenderer.prototype),"draw",this).call(this);//get canvas
 var canvas=document.getElementById('thegame');var context=canvas.getContext('2d');context.fillStyle='#2d2d2d';context.fillRect(0,0,canvas.width,canvas.height);//todo draw stuff
 }/*addObject(dynamicObject, type) {
 
@@ -8281,33 +8283,33 @@ var canvas=document.getElementById('thegame');var context=canvas.getContext('2d'
 
     removeObject() {
 
-    }*/}]);return TapchanRenderer;}(Renderer);module.exports=TapchanRenderer;},{"lance-gg":126}],234:[function(require,module,exports){/**
+    }*/}]);return TapchanRenderer;}(Renderer);module.exports=TapchanRenderer;},{"./Camera":232,"lance-gg":126}],235:[function(require,module,exports){/**
  * Created by Snippy on 2017-05-03.
  */var qsOptions=require('querystring').parse(location.search);var TapchanClientEngine=require('./TapchanClientEngine');var TapchanGameEngine=require('../common/TapchanGameEngine');var SimplePhysicsEngine=require('lance-gg').physics.SimplePhysicsEngine;// default options, overwritten by query-string options
 // is sent to both game engine and client engine
 var defaults={traceLevel:1,delayInputCount:3,clientIDSpace:1000000,syncOptions:{sync:qsOptions.sync||'extrapolate',localObjBending:0.0,remoteObjBending:0.8,bendingIncrements:6}};var options=Object.assign(defaults,qsOptions);// extrapolate mode requires a physics engine on the client
 if(options.syncOptions.sync==='extrapolate')options.physicsEngine=new SimplePhysicsEngine();// create a client engine and a game engine
-var gameEngine=new TapchanGameEngine(options);var clientEngine=new TapchanClientEngine(gameEngine,options);document.addEventListener('DOMContentLoaded',function(e){promise=clientEngine.start();});},{"../common/TapchanGameEngine":238,"./TapchanClientEngine":232,"lance-gg":126,"querystring":187}],235:[function(require,module,exports){/**
+var gameEngine=new TapchanGameEngine(options);var clientEngine=new TapchanClientEngine(gameEngine,options);document.addEventListener('DOMContentLoaded',function(e){promise=clientEngine.start();});},{"../common/TapchanGameEngine":239,"./TapchanClientEngine":233,"lance-gg":126,"querystring":187}],236:[function(require,module,exports){/**
  * Created by Snippy on 2017-04-27.
- */var DynamicObject=require('lance-gg').serialize.DynamicObject;var Collectible=function(_DynamicObject){_inherits(Collectible,_DynamicObject);function Collectible(id,x,y,type){_classCallCheck(this,Collectible);var _this25=_possibleConstructorReturn(this,(Collectible.__proto__||Object.getPrototypeOf(Collectible)).call(this,id));_this25.position.set(x,y);_this25.type=type;_this25.class=Collectible;return _this25;}// onAddToWorld(gameEngine) {
+ */var DynamicObject=require('lance-gg').serialize.DynamicObject;var Collectible=function(_DynamicObject){_inherits(Collectible,_DynamicObject);function Collectible(id,x,y,type){_classCallCheck(this,Collectible);var _this26=_possibleConstructorReturn(this,(Collectible.__proto__||Object.getPrototypeOf(Collectible)).call(this,id));_this26.position.set(x,y);_this26.type=type;_this26.class=Collectible;return _this26;}// onAddToWorld(gameEngine) {
 //     if (gameEngine.renderer) {
 //         gameEngine.renderer.addSprite(this, 'pacman');
 //     }
 // }
-return Collectible;}(DynamicObject);var Food=function(_Collectible){_inherits(Food,_Collectible);function Food(){_classCallCheck(this,Food);return _possibleConstructorReturn(this,(Food.__proto__||Object.getPrototypeOf(Food)).apply(this,arguments));}_createClass(Food,[{key:"onAddToWorld",value:function onAddToWorld(gameEngine){if(gameEngine.renderer){gameEngine.renderer.addSprite(this,'food');}}}]);return Food;}(Collectible);module.exports=Collectible;},{"lance-gg":126}],236:[function(require,module,exports){/**
+return Collectible;}(DynamicObject);var Food=function(_Collectible){_inherits(Food,_Collectible);function Food(){_classCallCheck(this,Food);return _possibleConstructorReturn(this,(Food.__proto__||Object.getPrototypeOf(Food)).apply(this,arguments));}_createClass(Food,[{key:"onAddToWorld",value:function onAddToWorld(gameEngine){if(gameEngine.renderer){gameEngine.renderer.addSprite(this,'food');}}}]);return Food;}(Collectible);module.exports=Collectible;},{"lance-gg":126}],237:[function(require,module,exports){/**
  * Created by Snippy on 2017-04-27.
- */var DynamicObject=require('lance-gg').serialize.DynamicObject;var Ghost=function(_DynamicObject2){_inherits(Ghost,_DynamicObject2);function Ghost(id,x,y){_classCallCheck(this,Ghost);var _this27=_possibleConstructorReturn(this,(Ghost.__proto__||Object.getPrototypeOf(Ghost)).call(this,id));_this27.position.set(x,y);_this27.class=Ghost;return _this27;}_createClass(Ghost,[{key:"onAddToWorld",value:function onAddToWorld(gameEngine){if(gameEngine.renderer){gameEngine.renderer.addSprite(this,'ghost');}}}]);return Ghost;}(DynamicObject);module.exports=Ghost;},{"lance-gg":126}],237:[function(require,module,exports){/**
+ */var DynamicObject=require('lance-gg').serialize.DynamicObject;var Ghost=function(_DynamicObject2){_inherits(Ghost,_DynamicObject2);function Ghost(id,x,y){_classCallCheck(this,Ghost);var _this28=_possibleConstructorReturn(this,(Ghost.__proto__||Object.getPrototypeOf(Ghost)).call(this,id));_this28.position.set(x,y);_this28.class=Ghost;return _this28;}_createClass(Ghost,[{key:"onAddToWorld",value:function onAddToWorld(gameEngine){if(gameEngine.renderer){gameEngine.renderer.addSprite(this,'ghost');}}}]);return Ghost;}(DynamicObject);module.exports=Ghost;},{"lance-gg":126}],238:[function(require,module,exports){/**
  * Created by Snippy on 2017-04-27.
- */var DynamicObject=require('lance-gg').serialize.DynamicObject;var x=1200;var Pacman=function(_DynamicObject3){_inherits(Pacman,_DynamicObject3);function Pacman(id,x,y,playerId){_classCallCheck(this,Pacman);var _this28=_possibleConstructorReturn(this,(Pacman.__proto__||Object.getPrototypeOf(Pacman)).call(this,id));_this28.position.set(x,y);_this28.angle=90;//facing right
-_this28.playerId=playerId;_this28.class=Pacman;return _this28;}// onAddToWorld(gameEngine) {
+ */var DynamicObject=require('lance-gg').serialize.DynamicObject;var x=1200;var Pacman=function(_DynamicObject3){_inherits(Pacman,_DynamicObject3);function Pacman(id,x,y,playerId){_classCallCheck(this,Pacman);var _this29=_possibleConstructorReturn(this,(Pacman.__proto__||Object.getPrototypeOf(Pacman)).call(this,id));_this29.position.set(x,y);_this29.angle=90;//facing right
+_this29.playerId=playerId;_this29.class=Pacman;return _this29;}// onAddToWorld(gameEngine) {
 //     if (gameEngine.renderer) {
 //         gameEngine.renderer.addObject(this, 'pacman');
 //     }
 // }
-return Pacman;}(DynamicObject);module.exports=Pacman;},{"lance-gg":126}],238:[function(require,module,exports){/**
+return Pacman;}(DynamicObject);module.exports=Pacman;},{"lance-gg":126}],239:[function(require,module,exports){/**
  * Created by Snippy on 2017-04-27.
  */var GameEngine=require('lance-gg').GameEngine;var Pacman=require('./Pacman');var Ghost=require('./Ghost');var Wall=require('./Wall');var Collectibles=require('./Collectibles');//Game constants
-var PLAYER_SPEED=50;var PLAYER_SIZE=40;var GHOST_SPEED=50;var GHOST_SIZE=40;var MAP_WIDTH=1000;var MAP_HEIGHT=1000;var TapchanGameEngine=function(_GameEngine){_inherits(TapchanGameEngine,_GameEngine);function TapchanGameEngine(){_classCallCheck(this,TapchanGameEngine);var _this29=_possibleConstructorReturn(this,(TapchanGameEngine.__proto__||Object.getPrototypeOf(TapchanGameEngine)).call(this));_this29.players=[];_this29.ghosts=[];_this29.walls=[];return _this29;}_createClass(TapchanGameEngine,[{key:"start",value:function start(){var _this30=this;_get(TapchanGameEngine.prototype.__proto__||Object.getPrototypeOf(TapchanGameEngine.prototype),"start",this).call(this);this.on('postStep',function(){return _this30.postStepHandlePacman();});this.on('objectAdded',function(object){//todo
+var PLAYER_SPEED=50;var PLAYER_SIZE=40;var GHOST_SPEED=50;var GHOST_SIZE=40;var MAP_WIDTH=1000;var MAP_HEIGHT=1000;var TapchanGameEngine=function(_GameEngine){_inherits(TapchanGameEngine,_GameEngine);function TapchanGameEngine(){_classCallCheck(this,TapchanGameEngine);var _this30=_possibleConstructorReturn(this,(TapchanGameEngine.__proto__||Object.getPrototypeOf(TapchanGameEngine)).call(this));_this30.players=[];_this30.ghosts=[];_this30.walls=[];return _this30;}_createClass(TapchanGameEngine,[{key:"start",value:function start(){var _this31=this;_get(TapchanGameEngine.prototype.__proto__||Object.getPrototypeOf(TapchanGameEngine.prototype),"start",this).call(this);this.on('postStep',function(){return _this31.postStepHandlePacman();});this.on('objectAdded',function(object){//todo
 /*if (object.id == 1) {
              this.paddle1 = object;
              } else if (object.id == 2) {
@@ -8318,7 +8320,7 @@ var PLAYER_SPEED=50;var PLAYER_SIZE=40;var GHOST_SPEED=50;var GHOST_SIZE=40;var 
 // this.addObjectToWorld(new Ghost(++this.world.idCount, 100, 100, 0));
 // this.addObjectToWorld(new Wall(++this.world.idCount, 200, 200));
 }},{key:"postStepHandlePacman",value:function postStepHandlePacman(){//todo collisions and stuff
-}}]);return TapchanGameEngine;}(GameEngine);module.exports=TapchanGameEngine;},{"./Collectibles":235,"./Ghost":236,"./Pacman":237,"./Wall":239,"lance-gg":126}],239:[function(require,module,exports){/**
+}}]);return TapchanGameEngine;}(GameEngine);module.exports=TapchanGameEngine;},{"./Collectibles":236,"./Ghost":237,"./Pacman":238,"./Wall":240,"lance-gg":126}],240:[function(require,module,exports){/**
  * Created by Snippy on 2017-04-27.
- */var DynamicObject=require('lance-gg').serialize.DynamicObject;var Wall=function(_DynamicObject4){_inherits(Wall,_DynamicObject4);function Wall(id,x,y){_classCallCheck(this,Wall);var _this31=_possibleConstructorReturn(this,(Wall.__proto__||Object.getPrototypeOf(Wall)).call(this,id));_this31.position.set(x,y);_this31.class=Wall;return _this31;}_createClass(Wall,[{key:"onAddToWorld",value:function onAddToWorld(gameEngine){if(gameEngine.renderer){gameEngine.renderer.addSprite(this,'wall');}}}]);return Wall;}(DynamicObject);module.exports=Wall;},{"lance-gg":126}]},{},[234]);
+ */var DynamicObject=require('lance-gg').serialize.DynamicObject;var Wall=function(_DynamicObject4){_inherits(Wall,_DynamicObject4);function Wall(id,x,y){_classCallCheck(this,Wall);var _this32=_possibleConstructorReturn(this,(Wall.__proto__||Object.getPrototypeOf(Wall)).call(this,id));_this32.position.set(x,y);_this32.class=Wall;return _this32;}_createClass(Wall,[{key:"onAddToWorld",value:function onAddToWorld(gameEngine){if(gameEngine.renderer){gameEngine.renderer.addSprite(this,'wall');}}}]);return Wall;}(DynamicObject);module.exports=Wall;},{"lance-gg":126}]},{},[235]);
 //# sourceMappingURL=bundle.js.map

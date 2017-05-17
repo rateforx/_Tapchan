@@ -3,6 +3,7 @@
  */
 
 const Renderer = require('lance-gg').render.Renderer;
+const Campera = require('./Camera');
 
 class TapchanRenderer extends Renderer {
 
@@ -14,6 +15,8 @@ class TapchanRenderer extends Renderer {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         };
+
+        this.camera = new Camera();
     }
 
     draw() {
