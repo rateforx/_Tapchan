@@ -9,15 +9,6 @@ const Wall          = require('./Wall');
 const Collectibles  = require('./Collectibles');
 const Map           = require('./Map');
 
-//Game constants
-const PLAYER_SPEED      = 50;
-const PLAYER_SIZE       = 40;
-const GHOST_SPEED       = 50;
-const GHOST_SIZE        = 40;
-const MAP_WIDTH         = 1000;
-const MAP_HEIGHT        = 1000;
-
-
 class TapchanGameEngine extends GameEngine {
 
     constructor() {
@@ -71,11 +62,7 @@ class TapchanGameEngine extends GameEngine {
     initGame() {
 
         this.addObjectToWorld(new Pacman(++this.world.idCount, 0, 0, 0));
-        // this.addObjectToWorld(new Pacman(++this.world.idCount, 100, 100, 1));
-
-        // this.addObjectToWorld(new Ghost(++this.world.idCount, 100, 100, 0));
-
-        // this.addObjectToWorld(new Wall(++this.world.idCount, 200, 200));
+        let map = new Map('test');
     }
 
 

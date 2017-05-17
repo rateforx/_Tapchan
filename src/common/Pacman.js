@@ -3,8 +3,9 @@
  */
 
 const DynamicObject = require('lance-gg').serialize.DynamicObject;
-let x = 1200;
 
+const SPEED = 50;
+const SIZE = 40;
 
 class Pacman extends DynamicObject {
 
@@ -15,8 +16,9 @@ class Pacman extends DynamicObject {
         this.angle = 90; //facing right
         this.playerId = playerId;
         this.class = Pacman;
+        this.size = 40;
+        this.speed = 50;
     }
-
 
     // onAddToWorld(gameEngine) {
     //     if (gameEngine.renderer) {

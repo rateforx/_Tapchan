@@ -28,6 +28,22 @@ class TapchanRenderer extends Renderer {
         context.fillRect(0, 0, canvas.width, canvas.height);
 
         //todo draw stuff
+        this.drawPlayers(context);
+    }
+
+    drawPlayers(context) {
+        for(let i = 0; i < this.gameEngine.players.length; i++) {
+            let player = this.gameEngine.players[i];
+
+            context.beginPath();
+            context.arc(player.x, player.y, player.size / 2, 0, Math.PI * 2);
+            context.fillStyle = 'yellow';
+            context.fill();
+            context.lineWidth = 5;
+            context.strokeStyle = 'darkyellow';
+            context.stroke();
+            context.closePath();
+        }
     }
 
     /*addObject(dynamicObject, type) {

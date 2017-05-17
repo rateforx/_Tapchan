@@ -2,6 +2,8 @@
  * Created by Snippy on 2017-05-17.
  */
 
+const TwoVector = require('lance-gg').TwoVector;
+
 class Camera {
 
     constructor(x, y, w, h) {
@@ -16,6 +18,7 @@ class Camera {
         this.position.set(x, y);
 
         this.scale = 1;
+
         this.size = {
             w, h,
             set: (w, h) => {
