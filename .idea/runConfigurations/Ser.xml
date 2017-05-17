@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Ser" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$/../Tapchan">
+  <configuration default="false" name="Ser" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="C:/Program Files/nodejs/node" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$">
     <envs>
-      <env name="DEBUG" value="esjstst:*" />
+      <env name="DEBUG" value="Tapchan:*" />
     </envs>
     <browser name="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" with-js-debugger="true" url="http://localhost:3000/" />
     <EXTENSION ID="com.jetbrains.nodejs.remote.docker.NodeJSDockerRunConfigurationExtension">

@@ -5,9 +5,9 @@
   "scripts" :
   {
     "start"       : "node bin/www",
-    "--postinstall" : "browserify src/client/clientMain.js -o public/scripts/bundle.js",
-    "--build"       : "browserify src/client/clientMain.js -o public/scripts/bundle.js",
-    "--watchify"    : "watchify src/client/clientMain.js -o public/scripts/bundle.js -v -d"
+    "postinstall" : "browserify src/client/clientMain.js -o public/scripts/bundle.js",
+    "build"       : "browserify src/client/clientMain.js -o public/scripts/bundle.js",
+    "watchify"    : "watchify src/client/clientMain.js -o public/scripts/bundle.js -v -d"
   },
   "dependencies" :
   {

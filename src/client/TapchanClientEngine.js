@@ -10,7 +10,7 @@ class TapchanClientEngine extends ClientEngine {
     constructor(gameEngine, options) {
         super(gameEngine, options, TapchanRenderer);
 
-        this.serializer.registerClass(require('../common/Pacman'));
+        // this.serializer.registerClass(require('../common/Pacman'));
         this.gameEngine.on('client__preStep', this.preStep.bind(this));
 
         //keep a reference for key press state

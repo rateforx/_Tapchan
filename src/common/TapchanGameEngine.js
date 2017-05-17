@@ -71,7 +71,7 @@ class TapchanGameEngine extends GameEngine {
         this.addObjectToWorld(new Pacman(++this.world.idCount, 0, 0, 0));
         // this.addObjectToWorld(new Pacman(++this.world.idCount, 100, 100, 1));
 
-        this.addObjectToWorld(new Ghost(++this.world.idCount, 100, 100, 0));
+        // this.addObjectToWorld(new Ghost(++this.world.idCount, 100, 100, 0));
 
         // this.addObjectToWorld(new Wall(++this.world.idCount, 200, 200));
     }

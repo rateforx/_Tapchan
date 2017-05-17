@@ -14,13 +14,19 @@ const users           = require('./routes/users');
 const app             = express();
 
 const fs  = require('fs');
-let b   = browserify(/*{
+let b   = browserify({
+    entries: ['./src/client/clientMain.js'],
     cache: {},
     packageCache:{},
     plugin: [watchify]
-}*/)
-    .require('./src/client/clientMain')
-    .bundle().pipe(fs.createWriteStream('public/scripts/bundle.js'));
+});
+    // .require('./src/client/clientMain.js')
+    // .bundle().pipe(fs.createWriteStream('public/scripts/bundle.js'));
+b.on('update', bundle);
+bundle();
+function bundle() {
+    b.bundle().pipe((fs.createWriteStream('./public/scripts/bundle.js')));
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

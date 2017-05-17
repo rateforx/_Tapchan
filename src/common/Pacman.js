@@ -18,11 +18,11 @@ class Pacman extends DynamicObject {
     }
 
 
-    onAddToWorld(gameEngine) {
-        if (gameEngine.renderer) {
-            gameEngine.renderer.addSprite(this, 'pacman');
-        }
-    }
+    // onAddToWorld(gameEngine) {
+    //     if (gameEngine.renderer) {
+    //         gameEngine.renderer.addObject(this, 'pacman');
+    //     }
+    // }
 
 }
 module.exports = Pacman;
