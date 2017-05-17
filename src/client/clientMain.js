@@ -30,4 +30,4 @@ if (options.syncOptions.sync === 'extrapolate')
 const gameEngine = new TapchanGameEngine(options);
 const clientEngine = new TapchanClientEngine(gameEngine, options);
 
-document.addEventListener('DOMContentLoaded', function(e) { clientEngine.start(); });
+document.addEventListener('DOMContentLoaded', function(e) { promise = clientEngine.start(); });

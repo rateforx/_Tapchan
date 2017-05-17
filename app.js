@@ -20,8 +20,11 @@ let b   = browserify({
     packageCache:{},
     plugin: [watchify]
 });
-    // .require('./src/client/clientMain.js')
-    // .bundle().pipe(fs.createWriteStream('public/scripts/bundle.js'));
+b.plugin(bundle, {
+    delay: 1000/*,
+    ignoreWatch: true,
+    poll: false*/
+});
 b.on('update', bundle);
 bundle();
 function bundle() {

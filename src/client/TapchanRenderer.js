@@ -16,17 +16,12 @@ class TapchanRenderer extends Renderer {
         };
     }
 
-    /*init(...param) {
-        let canvas = document.getElementById('thegame');
-        let context = canvas.getContext('2d');
-     }*/
-
     draw() {
         super.draw();
         //get canvas
         let canvas = document.getElementById('thegame');
         let context = canvas.getContext('2d');
-        context.fillStyle = 'lightgreen';
+        context.fillStyle = '#2d2d2d';
         context.fillRect(0, 0, canvas.width, canvas.height);
 
         //todo draw stuff
