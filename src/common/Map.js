@@ -9,8 +9,10 @@ class Map {
     constructor(name) {
 
         this.name = name;
-        this.load(name);
         this.data = [];
+        this.width;
+        this.height;
+        this.load(name);
     }
 
     load() {
@@ -28,6 +30,16 @@ class Map {
          }
          this.data = data;
          });
+    }
+
+    calcSize() {
+
+    }
+
+    getSize() {
+
+
+        return { w: w, h: h };
     }
 }
 module.exports = Map;

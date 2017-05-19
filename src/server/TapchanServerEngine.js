@@ -8,6 +8,10 @@ class TapchanServerEngine extends ServerEngine {
 
     constructor(io, gameEngine, inputOptions) {
         super(io, gameEngine, inputOptions);
+
+        this.pacmans = [];
+        // this.ghosts = [];
+        // this.walls = [];
     }
 
     start() {
@@ -18,14 +22,15 @@ class TapchanServerEngine extends ServerEngine {
     onPlayerConnected(socket) {
         super.onPlayerConnected(socket);
 
-        this.players.push(socket.id);
+        this.pacmans.push(socket.id)
+        this.gameEngine.
         console.log('Player ' + socket.id + ' connected.');
     }
 
     onPlayerDisconnected(socketId, playerId) {
         super.onPlayerDisconnected(socketId, playerId);
 
-        this.players.splice(this.players.indexOf(socketId), 1);
+        this.pacmans.splice(this.pacmans.indexOf(socketId), 1);
     }
 }
 module.exports = TapchanServerEngine;

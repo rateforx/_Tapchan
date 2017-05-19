@@ -11,16 +11,33 @@ const Map           = require('./Map');
 
 class TapchanGameEngine extends GameEngine {
 
-    constructor() {
-        super();
+    /**
+     * using start() instead
+    constructor(options) {
+        super(options);
 
-        this.players = [];
+        this.pacmans = [];
         this.ghosts  = [];
         this.walls   = [];
     }
+     */
 
     start() {
         super.start();
+
+        /* init timer
+        this.timer = new Timer();
+        this.timer.play();
+        this.on('server__postStep' () => this.timer.tick());
+         */
+
+        this.map = new Map('test');
+
+        this.worldSettings = {
+            worldWrap: true,
+            width: this.map.getSize().w,
+            height: this.map.getSize().h,
+        }
 
         this.on('postStep', () => this.postStepHandlePacman() );
         this.on('objectAdded', (object) => {
@@ -58,16 +75,12 @@ class TapchanGameEngine extends GameEngine {
         }
     }
 
-
-    initGame() {
-
-        this.addObjectToWorld(new Pacman(++this.world.idCount, 0, 0, 0));
-        let map = new Map('test');
-    }
-
-
     postStepHandlePacman() {
         //todo collisions and stuff
+    }
+
+    createPlayer() {
+
     }
 }
 module.exports = TapchanGameEngine;

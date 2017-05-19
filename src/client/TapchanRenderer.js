@@ -3,7 +3,7 @@
  */
 
 const Renderer = require('lance-gg').render.Renderer;
-const Campera = require('./Camera');
+const Camera = require('./Camera');
 
 class TapchanRenderer extends Renderer {
 
@@ -16,7 +16,8 @@ class TapchanRenderer extends Renderer {
             canvas.height = window.innerHeight;
         };
 
-        this.camera = new Camera();
+        console.log('playerid: ' + this.clientEngine.playerId );
+        // this.camera = new Camera();
     }
 
     draw() {
@@ -32,8 +33,8 @@ class TapchanRenderer extends Renderer {
     }
 
     drawPlayers(context) {
-        for(let i = 0; i < this.gameEngine.players.length; i++) {
-            let player = this.gameEngine.players[i];
+        for(let i = 0; i < this.gameEngine.pacmans.length; i++) {
+            let player = this.gameEngine.pacmans[i];
 
             context.beginPath();
             context.arc(player.x, player.y, player.size / 2, 0, Math.PI * 2);
