@@ -6,17 +6,12 @@ const DynamicObject = require('lance-gg').serialize.DynamicObject;
 
 class Wall extends DynamicObject {
 
-    constructor(id, x, y) {
+    constructor(id, x, y, w, h) {
         super(id);
         this.position.set(x, y);
+        this.width = w;
+        this.height = h;
         this.class = Wall;
     }
-
-    onAddToWorld(gameEngine) {
-        if (gameEngine.renderer) {
-            gameEngine.renderer.addSprite(this, 'wall');
-        }
-    }
-
 }
 module.exports = Wall;

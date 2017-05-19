@@ -33,8 +33,8 @@ class TapchanRenderer extends Renderer {
     }
 
     drawPlayers(context) {
-        for(let i = 0; i < this.gameEngine.pacmans.length; i++) {
-            let player = this.gameEngine.pacmans[i];
+        for(let i = 0; i < this.gameEngine.players.length; i++) {
+            let player = this.gameEngine.players[i];
 
             context.beginPath();
             context.arc(player.x, player.y, player.size / 2, 0, Math.PI * 2);

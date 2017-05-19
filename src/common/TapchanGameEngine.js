@@ -7,51 +7,19 @@ const Pacman        = require('./Pacman');
 const Ghost         = require('./Ghost');
 const Wall          = require('./Wall');
 const Collectibles  = require('./Collectibles');
-const Map           = require('./Map');
+const Map           = require('../server/Map');
 
 class TapchanGameEngine extends GameEngine {
-
-    /**
-     * using start() instead
-    constructor(options) {
-        super(options);
-
-        this.pacmans = [];
-        this.ghosts  = [];
-        this.walls   = [];
-    }
-     */
 
     start() {
         super.start();
 
-        /* init timer
-        this.timer = new Timer();
-        this.timer.play();
-        this.on('server__postStep' () => this.timer.tick());
-         */
-
-        this.map = new Map('test');
-
         this.worldSettings = {
             worldWrap: true,
-            // width: this.map.getSize().w,
-            // height: this.map.getSize().h,
+            width: 0,
+            height: 0,
         };
-
-        this.on('postStep', () => this.postStepHandlePacman() );
-        this.on('objectAdded', (object) => {
-            //todo
-            /*if (object.id == 1) {
-             this.paddle1 = object;
-             } else if (object.id == 2) {
-             this.paddle2 = object;
-             } else if (object.class == Ball) {
-             this.ball = object;
-             }*/
-        })
     }
-
 
     registerClasses(serializer) {
         serializer.registerClass(require('./Pacman'));
@@ -59,7 +27,6 @@ class TapchanGameEngine extends GameEngine {
         serializer.registerClass(require('./Wall'));
         serializer.registerClass(require('./Collectibles'));
     }
-
 
     processInput(inputData, playerId, isServer) {
         super.processInput(inputData, playerId, false);
@@ -75,12 +42,20 @@ class TapchanGameEngine extends GameEngine {
         }
     }
 
-    postStepHandlePacman() {
-        //todo collisions and stuff
+    makeWall(x, y, w, h) {
+        let wall = new Wall(++this.world.idCount, x, y, w, h);
+        this.addObjectToWorld(wall);
+        console.log('+Wall ' + wall.toString());
+
+        return wall;
     }
 
-    createPlayer() {
+    makePacman(playerId, x, y, w, h) {
+        let pacman = new Pacman(++this.world.idCount, x, y, playerId);
+        this.addObjectToWorld(pacman);
+        console.log('+Pacman ' + pacman.toString());
 
+        return pacman;
     }
 }
 module.exports = TapchanGameEngine;

@@ -21,9 +21,9 @@ let b   = browserify({
     plugin: [watchify]
 });
 b.plugin(bundle, {
-    delay: 1000/*,
-    ignoreWatch: true,
-    poll: false*/
+    delay: 1000,
+    ignoreWatch: false,
+    poll: false,
 });
 b.on('update', bundle);
 bundle();
