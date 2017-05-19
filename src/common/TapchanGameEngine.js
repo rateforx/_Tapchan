@@ -35,9 +35,9 @@ class TapchanGameEngine extends GameEngine {
 
         this.worldSettings = {
             worldWrap: true,
-            width: this.map.getSize().w,
-            height: this.map.getSize().h,
-        }
+            // width: this.map.getSize().w,
+            // height: this.map.getSize().h,
+        };
 
         this.on('postStep', () => this.postStepHandlePacman() );
         this.on('objectAdded', (object) => {
