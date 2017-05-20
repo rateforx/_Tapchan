@@ -3,12 +3,16 @@
  */
 
 const Renderer = require('lance-gg').render.Renderer;
-const Pixi = require('pixi.js');
+const PIXI = require('pixi.js');
 // const Camera = require('./Camera');
+
+const Pacman = require('../common/Pacman');
+const Ghost = require('../common/Ghost');
+const Wall = require('../common/Wall');
 
 class TapchanRenderer extends Renderer {
 
-    get ASSETPATHS() {
+    static get ASSETPATHS() {
         return {
             pacman:  'public/assets/pacman.png',
             ghost:   'public/assets/ghost.png',
@@ -38,9 +42,9 @@ class TapchanRenderer extends Renderer {
         this.viewportWidth = window.innerWidth;
         this.viewportHeight = window.innerHeight;
 
-        this.stage = new Pixi.Container();
-        this.layer1 = new Pixi.Container();
-        this.layer2 = new Pixi.Container();
+        this.stage = new PIXI.Container();
+        this.layer1 = new PIXI.Container();
+        this.layer2 = new PIXI.Container();
 
         this.stage.addChild(this.layer1, this.layer2);
 
@@ -57,7 +61,7 @@ class TapchanRenderer extends Renderer {
         }*/
 
         return new Promise( (resolve, reject) => {
-            Pixi.loader.add(Object.keys(this.ASSETPATHS).map( (x) => {
+            PIXI.loader.add(Object.keys(this.ASSETPATHS).map( (x) => {
                 return {
                     name: x,
                     url: this.assetPathPrefix + this.ASSETPATHS[x],
@@ -74,7 +78,7 @@ class TapchanRenderer extends Renderer {
     }
 
     onDOMLoaded() {
-        this.renderer = Pixi.autoDetectRenderer(this.viewportWidth, this.viewportHeight);
+        this.renderer = PIXI.autoDetectRenderer(this.viewportWidth, this.viewportHeight);
         $('.pixiContainer').appendChild(this.renderer.view);
     }
 
@@ -82,11 +86,11 @@ class TapchanRenderer extends Renderer {
         window.onresize = () => this.setRendererSize();
 
         //background
-        this.clouds1 = new Pixi.extras.TilingSprite(Pixi.loader.resources.clouds1.texture, this.viewportWidth, this.viewportHeight);
-        this.clouds2 = new Pixi.extras.TilingSprite(Pixi.loader.resources.clouds2.texture, this.viewportWidth, this.viewportHeight);
+        this.clouds1 = new PIXI.extras.TilingSprite(PIXI.loader.resources.clouds1.texture, this.viewportWidth, this.viewportHeight);
+        this.clouds2 = new PIXI.extras.TilingSprite(PIXI.loader.resources.clouds2.texture, this.viewportWidth, this.viewportHeight);
 
-        this.clouds1.blendMode = Pixi.BLEND_MODES.ADD;
-        this.clouds2.blendMode = Pixi.BLEND_MODES.ADD;
+        this.clouds1.blendMode = PIXI.BLEND_MODES.ADD;
+        this.clouds2.blendMode = PIXI.BLEND_MODES.ADD;
         this.clouds2.alpha = .65;
 
         this.stage.addChild(this.clouds1, this.clouds2);
@@ -96,7 +100,7 @@ class TapchanRenderer extends Renderer {
 
         //debug
         if ('showworldbounds' in Utils.getUrlVars()) {
-            let graphics = new Pixi.Graphics();
+            let graphics = new PIXI.Graphics();
             graphics.beginFill('0xC21F7B');
             graphics.alpha = .1;
             graphics.drawRect(0, 0, this.worldSettings.width, this.worldSettings.height);
@@ -132,7 +136,18 @@ class TapchanRenderer extends Renderer {
         let viewportSeesBottomBound = this.camera.y < this.viewportHeight - worldHeight;
 
         for (let objId of Object.keys(this.sprites)) {
+            let objData = this.gameEngine.world.objects[objId];
+            let sprite = this.sprites[objId];
 
+            if (objData) {
+
+                sprite.x = objData.position.x;
+                sprite.y = objData.position.y;
+
+                if (objData.class === Pacman) {
+                    sprite.actor.sprite
+                }
+            }
         }
 
         /*
