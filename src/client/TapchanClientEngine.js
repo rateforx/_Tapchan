@@ -10,7 +10,6 @@ class TapchanClientEngine extends ClientEngine {
     constructor(gameEngine, options) {
         super(gameEngine, options, TapchanRenderer);
 
-        // this.serializer.registerClass(require('../common/Pacman'));
         this.gameEngine.on('client__preStep', this.preStep.bind(this));
 
         //keep a reference for key press state
@@ -19,24 +18,55 @@ class TapchanClientEngine extends ClientEngine {
             up: false,
             left: false,
             right: false,
-            space: false
+            // space: false,
         };
 
-        // let that = this;
-        document.onkeydown = (e) => this.onKeyChange(e, true);
-        document.onkeyup = (e) => this.onKeyChange(e, true);
-
+        // document.onkeydown = (e) => this.onKeyChange(e, true);
+        // document.onkeyup = (e) => this.onKeyChange(e, true);
+        $(document).on('keyDown', (e) => this.onKeyChange(e, true));
+        $(document).on('keyUp', (e) => this.onKeyChange(e, true));
     }
 
-        //our pre-step is to process all inputs
-        preStep() {
+    start() {
+        super.start();
 
-            if (this.pressedKeys.up)    this.sendInput('up', { movement: true });
-            if (this.pressedKeys.down)  this.sendInput('down', { movement: true });
-            if (this.pressedKeys.left)  this.sendInput('left', { movement: true });
-            if (this.pressedKeys.right) this.sendInput('right', { movement: true });
-            // if (this.pressedKey.space)  this.sendInput('space', { movement: true });
-        }
+        this.gameEngine.once('renderer.ready', () => {
+            //click event for "try again" button
+            $('#tryAgain, #joinGame').on('click', () => {
+                this.socket.emit('requestRestart');
+            })
+        })
+
+        this.networkMonitor.on('RTTUpdate', (e) => {
+            this.renderer.updateHUD(e);
+        })
+    }
+
+    connect() {
+        return super.connect().then( () => {
+
+            this.socket.on('scoreUpdate', (e) => {
+                this.renderer.updateScore(e);
+            });
+
+            this.socket.on('disconnect', (e) => {
+                console.log('---Disconnected---');
+                //todo show reconnect button on page
+            });
+
+            //opt: add autostart feature
+        })
+    }
+
+    //our pre-step is to process all inputs
+    preStep() {
+
+        if (this.pressedKeys.up)    this.sendInput('up', { movement: true });
+        if (this.pressedKeys.down)  this.sendInput('down', { movement: true });
+        if (this.pressedKeys.left)  this.sendInput('left', { movement: true });
+        if (this.pressedKeys.right) this.sendInput('right', { movement: true });
+        // if (this.pressedKey.space)  this.sendInput('space', { movement: true });
+    }
 
     onKeyChange(e, isDown) {
         e = e || window.event;

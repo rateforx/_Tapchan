@@ -18,7 +18,7 @@ class TapchanServerEngine extends ServerEngine {
     }
 
     onPlayerConnected(socket) {
-        if (this.players.length === 0) {
+        if (this.connectedPlayers.length === 0) {
             let map = Map.load('test');
             this.gameEngine.worldSettings.height = map.height;
             this.gameEngine.worldSettings.width = map.width;
@@ -43,7 +43,7 @@ class TapchanServerEngine extends ServerEngine {
             let x = this.gameEngine.worldSettings.width / 2;
             let y = this.gameEngine.worldSettings.height / 2;
 
-            let pacman = this.gameEngine.makePacman(socket.playerId, x, y, w, h);
+            let pacman = this.gameEngine.makePacman(socket.playerId, x, y);
 
             this.scoreData[ship.id] = {
                 points: 0,

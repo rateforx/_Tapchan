@@ -9,6 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Lance" level="project" />
     <orderEntry type="library" name="Lance" level="project" />
-    <orderEntry type="library" name="Browserify_Watchify" level="application" />
+    <orderEntry type="library" name="Pixi" level="project" />
   </component>
 </module>

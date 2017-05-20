@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Pixi" type="javaScript">
+    <properties>
+      <option name="frameworkName" value="node_modules" />
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/node_modules/pixi.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/node_modules/pixi.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

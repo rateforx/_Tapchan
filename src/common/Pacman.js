@@ -4,9 +4,6 @@
 
 const DynamicObject = require('lance-gg').serialize.DynamicObject;
 
-const SPEED = 50;
-const SIZE = 40;
-
 class Pacman extends DynamicObject {
 
     constructor(id, x, y, playerId) {
