@@ -10,6 +10,8 @@ class TapchanClientEngine extends ClientEngine {
     constructor(gameEngine, options) {
         super(gameEngine, options, TapchanRenderer);
 
+        this.gameStarted = false;
+
         this.gameEngine.on('client__preStep', this.preStep.bind(this));
 
         //keep a reference for key press state

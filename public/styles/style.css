@@ -13,7 +13,12 @@ h1 {
     font: 3em Pac-Font;
 }
 
-#thegame {
+#Tapchan {
+    text-align: right;
+
+}
+
+#thegame, #pixi {
     width: auto;
     height: auto;
     position: fixed;
