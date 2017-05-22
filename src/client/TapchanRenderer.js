@@ -6,6 +6,8 @@ const Renderer = require('lance-gg').render.Renderer;
 const PIXI = require('pixi.js');
 const Utils = require('../common/Utils');
 
+const PacmanActor = require('./PacmanActor');
+
 const Pacman = require('../common/Pacman');
 const Ghost = require('../common/Ghost');
 const Wall = require('../common/Wall');
@@ -124,17 +126,23 @@ class TapchanRenderer extends Renderer {
 
         if (objData.class === Pacman) {
 
-            let pacmanActor = sprite; //save ref to player pacman
-            sprite.actor.pacmanSprite.tint = 0xFFFF00; //color player pacman yellow todo should be set by player
+            let pacmanActor = new PacmanActor();
+            sprite = pacmanActor.sprite;
+            this.sprites[objData.id] = sprite;
+            sprite.id = objData.id;
 
-            // $('#tryAgain, #joinGame').disable().hide();
+            if (this.clientEngine.isOwnedByPlayer(objData)) {
+
+                this.playerPacman = sprite; //save ref to playerpac
+                sprite.actor.pacmanSprite.tint = 0xFFFF00; //color player pacman yellow todo should be set by player
+            }
 
             this.clientEngine.gameStarted = true;
 
             //remove tutorial after timeout
-            setTimeout( () => {
+            /*setTimeout( () => {
                 $('body').addClass('tutorial');
-            }, 10000);
+            }, 10000);*/
 
         } else if (objData.class === Ghost) {
 

@@ -66,10 +66,10 @@ class TapchanGameEngine extends GameEngine {
     }
 
     makePacman(playerId) {
-        let x = gameEngine.worldSettings.width / 2;
-        let y = gameEngine.worldSettings.height / 2;
+        let x = this.worldSettings.width / 2;
+        let y = this.worldSettings.height / 2;
 
-        let pacman = new Pacman(++this.world.idCount, gameEngine, x, y);
+        let pacman = new Pacman(++this.world.idCount, this, x, y);
         pacman.playerId = playerId;
         this.addObjectToWorld(pacman);
         console.log('+Pacman ' + pacman.toString());

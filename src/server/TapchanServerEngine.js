@@ -42,7 +42,6 @@ class TapchanServerEngine extends ServerEngine {
     onPlayerConnected(socket) {
         super.onPlayerConnected(socket);
 
-        // function makePlayerPacman(gameEngine) {
         let makePlayerPacman = () => {
             let pacman = this.gameEngine.makePacman(socket.playerId);
 
@@ -52,9 +51,10 @@ class TapchanServerEngine extends ServerEngine {
             };
             this.updateScore();
         };
+        // console.log(makePlayerPacman());
 
         //handle client restart requests
-        socket.on('restartRequest', () => makePlayerPacman);
+        socket.on('requestRestart', () => makePlayerPacman());
     }
 
     onPlayerDisconnected(socketId, playerId) {

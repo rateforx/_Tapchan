@@ -43,11 +43,11 @@ class TapchanClientEngine extends ClientEngine {
         //click event for "try again" button
         $('#tryAgain, #joinGame').on('click', () => {
             this.socket.emit('requestRestart');
-            console.info('emmiting restart request');
         });
 
         $('#reconnect').on('click', () => {
-            location.href += '?autoconnect';
+            // location.href += '?autoconnect';
+           location.reload();
         });
 
         this.gameEngine.once('renderer.ready', () => {
