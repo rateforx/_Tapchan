@@ -16,13 +16,7 @@ class TapchanServerEngine extends ServerEngine {
     start() {
         super.start();
 
-        let map = Map.load('test');
-        this.gameEngine.worldSettings.height = 9*40;
-        this.gameEngine.worldSettings.width = 9*40;
-
-        let w = 40;
-        let h = 40;
-
+        let map = {};
         map.lines = [
             'xxxxxxxxx',
             'x       x',
@@ -35,8 +29,8 @@ class TapchanServerEngine extends ServerEngine {
             'xxxxxxxxx',
         ];
 
-        for(let i = 0; i < map.lines.length; i++) {
-            for(let j = 0; j < map.lines[i].length; j++) {
+        for (let i = 0; i < map.lines.length; i++) {
+            for (let j = 0; j < map.lines[i].length; j++) {
 
                 if (map.lines[i][j] === 'x') {
                     this.gameEngine.makeWall(j * w, i * h, w, h);

@@ -43,6 +43,7 @@ class TapchanClientEngine extends ClientEngine {
         //click event for "try again" button
         $('#tryAgain, #joinGame').on('click', () => {
             this.socket.emit('requestRestart');
+            console.info('emmiting restart request');
         });
 
         $('#reconnect').on('click', () => {
@@ -51,7 +52,7 @@ class TapchanClientEngine extends ClientEngine {
 
         this.gameEngine.once('renderer.ready', () => {
 
-            let map = {};
+            /*let map = {};
 
             this.gameEngine.worldSettings = {
                 worldWrap: true,
@@ -81,7 +82,7 @@ class TapchanClientEngine extends ClientEngine {
                         this.gameEngine.makeWall(j * w, i * h, w, h);
                     }
                 }
-            }
+            }*/
         });
 
         this.networkMonitor.on('RTTUpdate', (e) => {

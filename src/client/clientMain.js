@@ -10,6 +10,7 @@ const SimplePhysicsEngine = require('lance-gg').physics.SimplePhysicsEngine;
 // default options, overwritten by query-string options
 // is sent to both game engine and client engine
 const defaults = {
+    autoConnect: true,
     traceLevel: 1,
     delayInputCount: 3,
     clientIDSpace: 1000000,

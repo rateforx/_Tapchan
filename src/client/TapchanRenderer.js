@@ -92,7 +92,7 @@ class TapchanRenderer extends Renderer {
         this.bg2.blendMode = PIXI.BLEND_MODES.ADD;
         this.bg2.alpha = .65;
 
-        this.stage.addChild(this.bg1, this.bg2);
+        // this.stage.addChild(this.bg1, this.bg2);
         this.stage.addChild(this.camera);
 
         this.deltaTime = Date.now();
@@ -100,8 +100,8 @@ class TapchanRenderer extends Renderer {
         //debug
         if ('showworldbounds' in Utils.getUrlVars()) {
             let graphics = new PIXI.Graphics();
-            graphics.beginFill('0xC21F7B');
-            graphics.alpha = .1;
+            graphics.beginFill('0xFF0000');
+            graphics.alpha = .5;
             graphics.drawRect(0, 0, this.gameEngine.worldSettings.width, this.gameEngine.worldSettings.height);
             this.camera.addChild(graphics);
         }

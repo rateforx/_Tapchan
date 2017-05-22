@@ -2,17 +2,38 @@
  * Created by Snippy on 2017-04-27.
  */
 
-const GameEngine    = require('lance-gg').GameEngine;
-const Pacman        = require('./Pacman');
-const Ghost         = require('./Ghost');
-const Wall          = require('./Wall');
-const Collectibles  = require('./Collectibles');
-const Map           = require('../server/Map');
+const GameEngine = require('lance-gg').GameEngine;
+const Timer = require('./Timer');
+
+const Pacman = require('./Pacman');
+const Ghost = require('./Ghost');
+const Wall = require('./Wall');
+const Collectibles = require('./Collectibles');
 
 class TapchanGameEngine extends GameEngine {
 
     start() {
         super.start();
+
+        this.timer = new Timer();
+        this.timer.play();
+        this.on('server__postStep', () => {
+            this.timer.tick();
+        });
+
+        this.worldSettings = {
+            worldWrap: true,
+            width: 360,
+            height: 360,
+        };
+
+        this.on('collisionStart', (e) => {
+            //todo handle collisions
+        });
+
+        this.on('postStep', () => {
+            //opt do stuff
+        })
     }
 
     registerClasses(serializer) {
