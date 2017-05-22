@@ -33,7 +33,7 @@ class TapchanServerEngine extends ServerEngine {
             for (let j = 0; j < map.lines[i].length; j++) {
 
                 if (map.lines[i][j] === 'x') {
-                    this.gameEngine.makeWall(j * w, i * h, w, h);
+                    this.gameEngine.makeWall(j * 40, i * 40, 40, 40);
                 }
             }
         }
