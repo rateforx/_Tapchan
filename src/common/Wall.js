@@ -9,8 +9,8 @@ class Wall extends DynamicObject {
     constructor(id, x, y, w, h) {
         super(id);
         this.position.set(x, y);
-        this.width = w;
-        this.height = h;
+        // this.width = w;
+        // this.height = h;
         this.class = Wall;
     }
 }

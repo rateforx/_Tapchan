@@ -13,12 +13,6 @@ class TapchanGameEngine extends GameEngine {
 
     start() {
         super.start();
-
-        this.worldSettings = {
-            worldWrap: true,
-            width: 0,
-            height: 0,
-        };
     }
 
     registerClasses(serializer) {
@@ -50,8 +44,12 @@ class TapchanGameEngine extends GameEngine {
         return wall;
     }
 
-    makePacman(playerId, x, y, w, h) {
-        let pacman = new Pacman(++this.world.idCount, x, y, playerId);
+    makePacman(playerId) {
+        let x = gameEngine.worldSettings.width / 2;
+        let y = gameEngine.worldSettings.height / 2;
+
+        let pacman = new Pacman(++this.world.idCount, gameEngine, x, y);
+        pacman.playerId = playerId;
         this.addObjectToWorld(pacman);
         console.log('+Pacman ' + pacman.toString());
 

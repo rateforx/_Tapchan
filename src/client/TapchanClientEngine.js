@@ -4,6 +4,7 @@
 
 const ClientEngine = require('lance-gg').ClientEngine;
 const TapchanRenderer = require('./TapchanRenderer');
+const Utils = require('../common/Utils');
 
 class TapchanClientEngine extends ClientEngine {
 
@@ -32,12 +33,56 @@ class TapchanClientEngine extends ClientEngine {
     start() {
         super.start();
 
+        this.gameEngine.on('objectDestroyed', (obj) => {
+            if (obj.class === Pacman && this.isOwnedByPlayer(obj)) {
+                $('body').addClass('lostGame');
+                $('#tryAgain').prop('disabled', false);
+            }
+        });
+
+        //click event for "try again" button
+        $('#tryAgain, #joinGame').on('click', () => {
+            this.socket.emit('requestRestart');
+        });
+
+        $('#reconnect').on('click', () => {
+            location.href += '?autoconnect';
+        });
+
         this.gameEngine.once('renderer.ready', () => {
-            //click event for "try again" button
-            $('#tryAgain, #joinGame').on('click', () => {
-                this.socket.emit('requestRestart');
-            })
-        })
+
+            let map = {};
+
+            this.gameEngine.worldSettings = {
+                worldWrap: true,
+                width: 9 * 40,
+                height: 9 * 40,
+            };
+
+            let w = 40;
+            let h = 40;
+
+            map.lines = [
+                'xxxxxxxxx',
+                'x       x',
+                'x   x   x',
+                'x       x',
+                'x   x   x',
+                'x       x',
+                'x   x   x',
+                'x       x',
+                'xxxxxxxxx',
+            ];
+
+            for (let i = 0; i < map.lines.length; i++) {
+                for (let j = 0; j < map.lines[i].length; j++) {
+
+                    if (map.lines[i][j] === 'x') {
+                        this.gameEngine.makeWall(j * w, i * h, w, h);
+                    }
+                }
+            }
+        });
 
         this.networkMonitor.on('RTTUpdate', (e) => {
             this.renderer.updateHUD(e);
@@ -53,10 +98,12 @@ class TapchanClientEngine extends ClientEngine {
 
             this.socket.on('disconnect', (e) => {
                 console.log('---Disconnected---');
-                //todo show reconnect button on page
+                $('#reconnect').show().prop('disabled', false);
             });
 
-            //opt: add autostart feature
+            if ('autostart' in Utils.getUrlVars()) {
+                this.socket.emit('requestRestart');
+            }
         })
     }
 
@@ -73,13 +120,13 @@ class TapchanClientEngine extends ClientEngine {
     onKeyChange(e, isDown) {
         e = e || window.event;
 
-        if (e.keyCode == '38') {
+        if (e.keyCode === '38') {
             this.pressedKeys.up = isDown;
-        } else if (e.keyCode == '40') {
+        } else if (e.keyCode === '40') {
             this.pressedKeys.down = isDown;
-        } else if (e.keyCode == '37') {
+        } else if (e.keyCode === '37') {
             this.pressedKeys.left = isDown;
-        } else if (e.keyCode == '39') {
+        } else if (e.keyCode === '39') {
             this.pressedKeys.right = isDown;
         // } else if (e.keyCode == '32') {
         //     this.pressedKeys.space = isDown;

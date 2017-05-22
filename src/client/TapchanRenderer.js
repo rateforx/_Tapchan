@@ -6,8 +6,6 @@ const Renderer = require('lance-gg').render.Renderer;
 const PIXI = require('pixi.js');
 const Utils = require('../common/Utils');
 
-// const Camera = require('./Camera');
-
 const Pacman = require('../common/Pacman');
 const Ghost = require('../common/Ghost');
 const Wall = require('../common/Wall');
@@ -19,8 +17,8 @@ class TapchanRenderer extends Renderer {
             pacman:  'assets/pacman.png',
             ghost:   'assets/ghost.png',
             wall:    'assets/wall.png',
-            clouds1: 'assets/clouds1.png',
-            clouds2: 'assets/clouds2.png',
+            bg1:     'assets/clouds1.png',
+            bg2:     'assets/clouds2.png',
         }
     }
 
@@ -30,15 +28,9 @@ class TapchanRenderer extends Renderer {
         this.isReady = false;
 
         this.assetPathPrefix = this.gameEngine.options.assetPathPrefix ? this.gameEngine.options.assetPathPrefix : '';
-        /*window.onresize = () => {
-            let canvas = document.getElementById('thegame');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        };*/
 
         this.bgPhaseX = 0;
-        this.bgPhasey = 0;
-        // this.camera = new Camera();
+        this.bgPhaseY = 0;
     }
 
     init() {
@@ -92,17 +84,16 @@ class TapchanRenderer extends Renderer {
         this.camera = new PIXI.Container();
         this.camera.addChild(this.layer1, this.layer2);
 
-
         //background
-        this.clouds1 = new PIXI.extras.TilingSprite(PIXI.loader.resources.clouds1.texture, this.viewportWidth, this.viewportHeight);
-        this.clouds2 = new PIXI.extras.TilingSprite(PIXI.loader.resources.clouds2.texture, this.viewportWidth, this.viewportHeight);
+        this.bg1 = new PIXI.extras.TilingSprite(PIXI.loader.resources.bg1.texture, this.viewportWidth, this.viewportHeight);
+        this.bg2 = new PIXI.extras.TilingSprite(PIXI.loader.resources.bg2.texture, this.viewportWidth, this.viewportHeight);
 
-        this.clouds1.blendMode = PIXI.BLEND_MODES.ADD;
-        this.clouds2.blendMode = PIXI.BLEND_MODES.ADD;
-        this.clouds2.alpha = .65;
+        this.bg1.blendMode = PIXI.BLEND_MODES.ADD;
+        this.bg2.blendMode = PIXI.BLEND_MODES.ADD;
+        this.bg2.alpha = .65;
 
-        this.stage.addChild(this.clouds1, this.clouds2);
-        // this.stage.addChild(this.camera);
+        this.stage.addChild(this.bg1, this.bg2);
+        this.stage.addChild(this.camera);
 
         this.deltaTime = Date.now();
 
@@ -111,7 +102,7 @@ class TapchanRenderer extends Renderer {
             let graphics = new PIXI.Graphics();
             graphics.beginFill('0xC21F7B');
             graphics.alpha = .1;
-            graphics.drawRect(0, 0, this.worldSettings.width, this.worldSettings.height);
+            graphics.drawRect(0, 0, this.gameEngine.worldSettings.width, this.gameEngine.worldSettings.height);
             this.camera.addChild(graphics);
         }
     }
@@ -120,10 +111,10 @@ class TapchanRenderer extends Renderer {
         this.viewportWidth = window.innerWidth;
         this.viewportHeight = window.innerHeight;
 
-        this.clouds1.width = this.viewportWidth;
-        this.clouds1.height = this.viewportHeight;
-        this.clouds2.width = this.viewportWidth;
-        this.clouds2.height = this.viewportHeight;
+        this.bg1.width = this.viewportWidth;
+        this.bg1.height = this.viewportHeight;
+        this.bg2.width = this.viewportWidth;
+        this.bg2.height = this.viewportHeight;
 
         this.renderer.resize(this.viewportWidth, this.viewportHeight);
     }
@@ -136,7 +127,7 @@ class TapchanRenderer extends Renderer {
             let pacmanActor = sprite; //save ref to player pacman
             sprite.actor.pacmanSprite.tint = 0xFFFF00; //color player pacman yellow todo should be set by player
 
-            $('#tryAgain, #joinGame').disable().css('opacity', 0);
+            // $('#tryAgain, #joinGame').disable().hide();
 
             this.clientEngine.gameStarted = true;
 
@@ -147,7 +138,7 @@ class TapchanRenderer extends Renderer {
 
         } else if (objData.class === Ghost) {
 
-            sprite = new PIXI.Sprite(PIXI.loader.resources.Ghost.texture);
+            sprite = new PIXI.Sprite(PIXI.loader.resources.ghost.texture);
             this.sprites[objData.id] = sprite;
 
             sprite.width = 40;
@@ -157,7 +148,7 @@ class TapchanRenderer extends Renderer {
 
         } else if (objData.class === Wall) {
 
-            sprite = new PIXI.Sprite(PIXI.loader.resources.Wall.texture);
+            sprite = new PIXI.Sprite(PIXI.loader.resources.wall.texture);
             this.sprites[objData.id] = sprite;
 
             sprite.width = 40;
@@ -250,7 +241,76 @@ class TapchanRenderer extends Renderer {
                     sprite.y = objData.position.y + worldHeight;
                 }
             }
+
+            if (sprite) {
+                //object is eigher a Pixi sprite or an Actor. Actors have renderSteps
+                if (sprite.actor && sprite.actor.renderStep) {
+                    sprite.actor.renderStep(now - this.deltaTime);
+                }
+            }
         }
+
+        let cameraTarget;
+        if (this.playerPacman) {
+            cameraTarget = this.playerPacman;
+            // this.cameraRoam = false;
+        } else if (!this.clientEngine.gameStarted && !cameraTarget) {
+            //calculate centroid
+            cameraTarget = getCentroid(this.gameEngine.world.objects);
+            this.cameraRoam = true;
+        }
+
+        if (cameraTarget) {
+            //let bgOffsetX = -this.bgPhaseX * worldWidth - cameraTarget.x;
+            //let bgOffsetY = -this.bgPhaseY * worldHeight - cameraTarget.y;
+
+            // 'cameraroam' in Utils.getUrlVars();
+            if (this.cameraRoam) {
+                let lookingAtDeltaX = cameraTarget.x - this.lookingAt.x;
+                let lookingAtDeltaY = cameraTarget.y - this.lookingAt.y;
+                let cameraTempTargetX;
+                let cameraTempTargetY;
+
+                if (lookingAtDeltaX > worldWidth / 2) {
+                    this.bgPhaseX++;
+                    cameraTempTargetX = this.lookingAt.x + worldWidth;
+                } else if (lookingAtDeltaX < -worldWidth / 2) {
+                    this.bgPhaseX--;
+                    cameraTempTargetX = this.lookingAt.x - worldWidth;
+                } else {
+                    cameraTempTargetX = this.lookingAt.x * .02;
+                }
+
+                if (lookingAtDeltaY > worldHeight / 2) {
+                    this.bgPhaseY++;
+                    cameraTempTargetY = this.lookingAt.y + worldHeight;
+                } else if (lookingAtDeltaY < -worldHeight / 2) {
+                    this.bgPhaseY--;
+                    cameraTempTargetY = this.lookingAt.y - worldHeight;
+                } else {
+                    cameraTempTargetY = this.lookingAt.y * .02;
+                }
+
+                this.centerCamera(cameraTempTargetX, cameraTempTargetY);
+
+            } else {
+                this.centerCamera(cameraTarget.x, cameraTarget.y);
+            }
+        }
+
+        let bgOffsetX = this.bgPhaseX * worldWidth + this.camera.x;
+        let bgOffsetY = this.bgPhaseY * worldHeight + this.camera.y;
+
+        this.bg1.tilePosition.x = bgOffsetX * .01;
+        this.bg1.tilePosition.y = bgOffsetY * .01;
+
+        this.bg2.tilePosition.x = bgOffsetX * .04;
+        this.bg2.tilePosition.y = bgOffsetY * .04;
+
+        this.deltaTime = now;
+
+        //draw stuff!!!
+        this.renderer.render(this.stage);
     }
 
     updateHUD(data) {
@@ -272,4 +332,32 @@ class TapchanRenderer extends Renderer {
 
     }
 }
+
+function getCentroid(objects) {
+    let maxDistance = 500; // max distance to add to the centroid
+    let shipCount = 0;
+    let centroid = {x: 0, y: 0};
+    let selectedShip = null;
+
+    for (let id of Object.keys(objects)) {
+        let obj = objects[id];
+        if (obj.class === Pacman) {
+            if (selectedShip === null)
+                selectedShip = obj;
+
+            let objDistance = Math.sqrt(Math.pow((selectedShip.position.x - obj.position.y), 2) + Math.pow((selectedShip.position.y - obj.position.y), 2));
+            if (selectedShip === obj || objDistance < maxDistance) {
+                centroid.x += obj.position.x;
+                centroid.y += obj.position.y;
+                shipCount++;
+            }
+        }
+    }
+
+    centroid.x /= shipCount;
+    centroid.y /= shipCount;
+
+    return centroid;
+}
+
 module.exports = TapchanRenderer;

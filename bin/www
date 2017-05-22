@@ -101,9 +101,20 @@ const TapchanGameEngine = require('../src/common/TapchanGameEngine.js');
 const SimplePhysicsEngine = require('lance-gg').physics.SimplePhysicsEngine;
 
 // Game Instances
-const physicsEngine = new SimplePhysicsEngine();
-const tapchanGameEngine = new TapchanGameEngine({ physicsEngine, traceLevel: 1 });
-const tapchanServerEngine = new TapchanServerEngine(io, tapchanGameEngine, { debug: {}, updateRate: 6 });
+const physicsEngine = new SimplePhysicsEngine({
+    collisionOptions: {
+        COLLISION_DISTANCE: 5,
+    }
+});
+const tapchanGameEngine = new TapchanGameEngine({
+    physicsEngine,
+    traceLevel: 1,
+});
+const tapchanServerEngine = new TapchanServerEngine(io, tapchanGameEngine, {
+    timeoutInterval: 60 * 5,
+    debug: {},
+    updateRate: 6,
+});
 
 // start the game
 tapchanServerEngine.start();
